@@ -1,5 +1,7 @@
 package io.itit.itf.okhttp.util;
 
+import android.databinding.adapters.SeekBarBindingAdapter;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -234,7 +236,7 @@ public class IOUtil {
 	public static void copyFile(
 			String sourceURL,
 			String destFilePath,
-			BiConsumer<Long,Long>progress)
+			CopyFileProgressListener progress)
 			throws Exception {
 		File destFile = new File(destFilePath);
 		URL url = new URL(sourceURL);
@@ -250,11 +252,17 @@ public class IOUtil {
             fos.write(buffer, 0, n);
             if(progress!=null){
             	//progress.accept(contentLength,currentLength);
+				progress.OnProgressChanged(contentLength,currentLength);
             }
         }
 		IOUtil.closeQuietly(is);
 		IOUtil.closeQuietly(fos);
 	}
+
+	public interface CopyFileProgressListener{
+		public void OnProgressChanged(long total , long current);
+	}
+
 	/**
 	 *  if we use file.delete to delete a none empty directory,delete action will
 	 *  fail,we need to delete all file under this directory first.
