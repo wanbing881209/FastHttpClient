@@ -48,7 +48,20 @@ public class PostRequest extends OkHttpRequest {
 		} else if (fileInfos != null && fileInfos.size() > 0) {
 			MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
 			addParams(builder);
-			fileInfos.forEach(fileInfo -> {
+//			fileInfos.forEach(fileInfo -> {
+//				RequestBody fileBody = null;
+//				if (fileInfo.file != null) {
+//					fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), fileInfo.file);
+//				} else if (fileInfo.fileInputStream != null) {
+//					fileBody = createRequestBody(MediaType.parse("application/octet-stream"), fileInfo.fileInputStream);
+//				} else {
+//					fileBody = RequestBody.create(MediaType.parse(getMimeType(fileInfo.fileName)),
+//							fileInfo.fileContent);
+//				}
+//				builder.addFormDataPart(fileInfo.partName, fileInfo.fileName, fileBody);
+//			});
+
+			for (FileInfo fileInfo : fileInfos) {
 				RequestBody fileBody = null;
 				if (fileInfo.file != null) {
 					fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), fileInfo.file);
@@ -59,7 +72,8 @@ public class PostRequest extends OkHttpRequest {
 							fileInfo.fileContent);
 				}
 				builder.addFormDataPart(fileInfo.partName, fileInfo.fileName, fileBody);
-			});
+			}
+
 			if (body != null && body.length() > 0) {
 				builder.addPart(RequestBody.create(MultipartBody.FORM, body));
 			}
@@ -87,20 +101,34 @@ public class PostRequest extends OkHttpRequest {
 
 	private void addParams(FormBody.Builder builder) {
 		if (params != null) {
-			params.forEach((k, v) -> builder.add(k, v));
+			//params.forEach((k, v) -> builder.add(k, v));
+			for(String k:params.keySet()){
+				String v = params.get(k);
+				builder.add(k, v);
+			}
 		}
 		if (encodedParams != null) {
-			encodedParams.forEach((k, v) -> builder.addEncoded(k, v));
+			//encodedParams.forEach((k, v) -> builder.addEncoded(k, v));
+			for(String k:encodedParams.keySet()){
+				String v = encodedParams.get(k);
+				builder.addEncoded(k, v);
+			}
 		}
 	}
 
 	//
 	private void addParams(MultipartBody.Builder builder) {
 		if (params != null && !params.isEmpty()) {
-			params.forEach((k, v) -> {
+//			params.forEach((k, v) -> {
+//				builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + k + "\""),
+//						RequestBody.create(null, v));
+//			});
+
+			for(String k:params.keySet()){
+				String v = params.get(k);
 				builder.addPart(Headers.of("Content-Disposition", "form-data; name=\"" + k + "\""),
 						RequestBody.create(null, v));
-			});
+			}
 		}
 	}
 

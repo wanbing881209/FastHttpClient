@@ -28,7 +28,18 @@ public class GetBuilder extends OkHttpRequestBuilder<GetBuilder> {
 			return url;
 		}
 		StringBuilder builder = new StringBuilder();
-		params.forEach((k,v)->{
+//		params.forEach((k,v)->{
+//			if(builder.length()==0){
+//				builder.append("?");
+//			}else if (builder.length()>0) {
+//				builder.append("&");
+//			}
+//			builder.append(k);
+//			builder.append("=").append(v);
+//		});
+
+		for(String k:params.keySet()){
+			String v = params.get(k);
 			if(builder.length()==0){
 				builder.append("?");
 			}else if (builder.length()>0) {
@@ -36,7 +47,8 @@ public class GetBuilder extends OkHttpRequestBuilder<GetBuilder> {
 			}
 			builder.append(k);
 			builder.append("=").append(v);
-		});
+
+		}
 		return url+builder.toString();
 	}
 }

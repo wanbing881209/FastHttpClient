@@ -2,6 +2,7 @@ package io.itit.itf.okhttp;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import io.itit.itf.okhttp.util.ClassUtils;
 import okhttp3.OkHttpClient;
@@ -50,7 +51,10 @@ public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder> {
 
 	public T addHeaders(Map<String, String> headers) {
 		if(headers!=null) {
-			headers.forEach((k,v)->{this.headers.put(k, v);});
+			//headers.forEach((k,v)->{this.headers.put(k, v);});
+			this.headers.putAll(headers);
+
+
 		}
 		return (T) this;
 	}
@@ -74,16 +78,18 @@ public abstract class OkHttpRequestBuilder<T extends OkHttpRequestBuilder> {
 		if(paramMap==null){
 			return (T) this;
 		}
-		paramMap.forEach((k,v)->{params.put(k, v);});
+		//paramMap.forEach((k,v)->{params.put(k, v);});
+		params.putAll(paramMap);
 		return (T) this;
 	}
 	
 	public T addParams(Object obj) {
 		if(obj!=null) {
 			Map<String, String> map=ClassUtils.objectToMap(obj);
-			map.forEach((key,val)->{
-				addParams(key, val);
-			});
+//			map.forEach((key,val)->{
+//				addParams(key, val);
+//			});
+			addParams(map);
 		}
 		return (T) this;
 	}

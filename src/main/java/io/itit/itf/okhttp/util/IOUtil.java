@@ -249,7 +249,7 @@ public class IOUtil {
         	currentLength+=n;
             fos.write(buffer, 0, n);
             if(progress!=null){
-            	progress.accept(contentLength,currentLength);
+            	//progress.accept(contentLength,currentLength);
             }
         }
 		IOUtil.closeQuietly(is);
@@ -263,13 +263,23 @@ public class IOUtil {
 		if(!directory.exists()){
 			return true;
 		}
-		Arrays.asList(directory.listFiles()).forEach(file->{
+//		Arrays.asList(directory.listFiles()).forEach(file->{
+//			if (file.isDirectory()) {
+//				deleteDirectory(file);
+//			} else {
+//				file.delete();
+//			}
+//		});
+
+		List<File> fileList = Arrays.asList(directory.listFiles());
+		for(File file:fileList){
 			if (file.isDirectory()) {
 				deleteDirectory(file);
 			} else {
 				file.delete();
 			}
-		});	
+		}
+
 		return (directory.delete());
 	}
 
